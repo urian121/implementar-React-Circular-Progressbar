@@ -43,7 +43,7 @@ function TodoApp() {
     setTasks([...tasks, { id: tasks.length + 1, text: newTask, completed: defaultStatus }]);
     // Restablece el valor de la nueva tarea después de agregarla.
     setNewTask("");
-    toast.success("Tarea agregada");
+    toast.success("Nueva tarea agregada");
   };
   // Cambia el estado de completado de una tarea específica identificada por su ID.
   const toggleTaskCompletion = (id) => {
