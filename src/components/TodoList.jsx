@@ -43,7 +43,12 @@ function TodoApp() {
     setTasks([...tasks, { id: tasks.length + 1, text: newTask, completed: defaultStatus }]);
     // Restablece el valor de la nueva tarea después de agregarla.
     setNewTask("");
-    toast.success("Nueva tarea agregada");
+
+    if (!toast.isActive("Toastify__toast")) {
+      toast.success("Tarea agregada correctamente", {
+        toastId: "Toastify__toast",
+      });
+    }
   };
   // Cambia el estado de completado de una tarea específica identificada por su ID.
   const toggleTaskCompletion = (id) => {
@@ -52,7 +57,15 @@ function TodoApp() {
       tasks.map((task) => {
         // Si el ID de la tarea coincide con el ID proporcionado, cambia el estado de completado.
         if (task.id === id) {
-          return { ...task, completed: !task.completed };
+          if (!toast.isActive("Toastify__toast")) {
+            toast.success("Tarea completada correctamente", {
+              toastId: "Toastify__toast",
+            });
+          }
+          return {
+            ...task,
+            completed: !task.completed,
+          };
         }
         // Devuelve la tarea sin cambios si no coincide con el ID proporcionado.
         return task;
@@ -63,7 +76,11 @@ function TodoApp() {
   // Elimina una tarea del estado de tareas utilizando el ID proporcionado.
   const borrarTarea = (id) => {
     setTasks(tasks.filter((task) => task.id !== id));
-    toast.success("Tarea eliminada");
+    if (!toast.isActive("Toastify__toast")) {
+      toast.error("Tarea eliminada correctamente", {
+        toastId: "Toastify__toast",
+      });
+    }
   };
 
   // Calcula el número de tareas completadas utilizando useMemo para memoizar el valor y evitar recálculos innecesarios.
@@ -95,10 +112,14 @@ function TodoApp() {
         </div>
 
         <div className="col-md-3 d-flex justify-content-center align-items-center">
-          <ProgressBar
-            completedTasksCount={completedTasksCount}
-            totalTasksCount={totalTasksCount}
-          />
+          {totalTasksCount === 0 ? (
+            <p className="text-center">No hay tareas 😭 {totalTasksCount - completedTasksCount}</p>
+          ) : (
+            <ProgressBar
+              completedTasksCount={completedTasksCount}
+              totalTasksCount={totalTasksCount}
+            />
+          )}
         </div>
       </div>
     </>
